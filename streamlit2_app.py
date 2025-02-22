@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 
 # Simulate loading a dataset (for demonstration purposes)
@@ -39,6 +40,35 @@ def set_background(image_url):
         unsafe_allow_html=True
     )
 
+def exploratory_data_analysis():
+    # Streamlit App Title
+    st.title("Client Data Analysis")
+ 
+    # Input for Power BI Embed URL
+    powerbi_url = st.text_input("Enter Power BI Embed URL:", 
+                                "https://app.powerbi.com/links/TjI-nyea44?ctid=e228c3df-233f-49c3-9d75-1ce285b59c78&pbi_source=linkShare")
+ 
+    # Check if a valid URL is provided
+    if powerbi_url:
+        st.markdown("### Power BI Dashboard")
+        st.write("Interact with the embedded Power BI dashboard below:")
+ 
+        # Embed the Power BI Report
+        powerbi_embed = f"""
+<iframe title="Power BI Report"
+                width="100%" 
+                height="800px"
+                src="{powerbi_url}"
+                frameborder="0"
+                allowFullScreen="true"></iframe>
+        """
+        components.html(powerbi_embed, height=850)
+    else:
+        st.warning("Please enter a valid Power BI embed link.")
+ 
+# Run the function
+exploratory_data_analysis()
+
 # Main function to run the app
 def main():
     # Add the header image
@@ -76,6 +106,8 @@ def main():
             st.success("The client is likely to return.")
         else:
             st.error("The client is unlikely to return.")
+
+    elif app
 
 # Run the app
 if __name__ == "__main__":
