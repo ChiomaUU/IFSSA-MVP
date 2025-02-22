@@ -41,25 +41,34 @@ def set_background(image_url):
     )
 
 def powerbi_dashboard():
-    # Input for Power BI Embed URL
-    powerbi_url = st.sidebar.text_input("Enter Power BI Embed URL:", 
-                                "https://app.powerbi.com/links/TjI-nyea44?ctid=e228c3df-233f-49c3-9d75-1ce285b59c78&pbi_source=linkShare")
- 
+    # Input for Power BI Embed URL in the sidebar
+    powerbi_url = st.sidebar.text_input(
+        "Enter Power BI Embed URL:",
+        "https://app.powerbi.com/links/TjI-nyea44?ctid=e228c3df-233f-49c3-9d75-1ce285b59c78&pbi_source=linkShare"
+    )
+
     # Check if a valid URL is provided
     if powerbi_url:
         st.sidebar.markdown("### Power BI Dashboard")
         st.sidebar.write("Interact with the embedded Power BI dashboard below:")
- 
-        # Embed the Power BI Report
+
+        # Display the Power BI dashboard in the main content area
+        st.markdown("### Power BI Dashboard")
+        st.write("Below is the embedded Power BI dashboard:")
+
+        # Embed the Power BI Report using an iframe
         powerbi_embed = f"""
-<iframe title="Power BI Report"
-                width="100%" 
-                height="800px"
-                src="{powerbi_url}"
-                frameborder="0"
-                allowFullScreen="true"></iframe>
+        <iframe
+            title="Power BI Report"
+            width="100%"
+            height="800"
+            src="{powerbi_url}"
+            frameborder="0"
+            allowFullScreen="true">
+        </iframe>
         """
-        components.html(powerbi_embed, height=850)
+        # Use components.html to render the iframe
+        components.html(powerbi_embed, height=800)
     else:
         st.sidebar.warning("Please enter a valid Power BI embed link.")
  
