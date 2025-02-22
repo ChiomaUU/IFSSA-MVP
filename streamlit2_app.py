@@ -40,18 +40,15 @@ def set_background(image_url):
         unsafe_allow_html=True
     )
 
-def exploratory_data_analysis():
-    # Streamlit App Title
-    st.title("Client Data Analysis")
- 
+def powerbi_dashboard():
     # Input for Power BI Embed URL
-    powerbi_url = st.text_input("Enter Power BI Embed URL:", 
+    powerbi_url = st.sidebar.text_input("Enter Power BI Embed URL:", 
                                 "https://app.powerbi.com/links/TjI-nyea44?ctid=e228c3df-233f-49c3-9d75-1ce285b59c78&pbi_source=linkShare")
  
     # Check if a valid URL is provided
     if powerbi_url:
-        st.markdown("### Power BI Dashboard")
-        st.write("Interact with the embedded Power BI dashboard below:")
+        st.sidebar.markdown("### Power BI Dashboard")
+        st.sidebar.write("Interact with the embedded Power BI dashboard below:")
  
         # Embed the Power BI Report
         powerbi_embed = f"""
@@ -64,11 +61,8 @@ def exploratory_data_analysis():
         """
         components.html(powerbi_embed, height=850)
     else:
-        st.warning("Please enter a valid Power BI embed link.")
+        st.sidebar.warning("Please enter a valid Power BI embed link.")
  
-# Run the function
-exploratory_data_analysis()
-
 # Main function to run the app
 def main():
     # Add the header image
@@ -90,10 +84,10 @@ def main():
     input_features = {}
 
     # Create input fields for each feature
-    input_features['age'] = st.sidebar.number_input("Enter Age", min_value=0, max_value=100, value=30)
-    input_features['household'] = st.sidebar.selectbox("Is the client part of a household?", options=[0, 1], format_func=lambda x: "Yes" if x == 1 else "No")
-    input_features['time_since_previous_visit'] = st.sidebar.number_input("Enter Time Since Previous Visit (in months)", min_value=0, value=1)
-    input_features['contact_frequency'] = st.sidebar.selectbox("Contact Frequency", options=["weekly", "monthly"])
+    input_features['age'] = st.number_input("Enter Age", min_value=0, max_value=100, value=30)
+    input_features['household'] = st.selectbox("Is the client part of a household?", options=[0, 1], format_func=lambda x: "Yes" if x == 1 else "No")
+    input_features['time_since_previous_visit'] = st.number_input("Enter Time Since Previous Visit (in months)", min_value=0, value=1)
+    input_features['contact_frequency'] = st.selectbox("Contact Frequency", options=["weekly", "monthly"])
 
     # Convert input to DataFrame
     input_df = pd.DataFrame([input_features])
@@ -107,7 +101,8 @@ def main():
         else:
             st.error("The client is unlikely to return.")
 
-
+    # Add Power BI Dashboard to the sidebar
+    powerbi_dashboard()
 
 # Run the app
 if __name__ == "__main__":
