@@ -86,7 +86,7 @@ def main():
         st.write(data)
 
     # Input fields for user to enter data
-    st.sidebar.header("Input Features")
+    st.header("Input Features")
     input_features = {}
 
     # Create input fields for each feature
@@ -99,7 +99,7 @@ def main():
     input_df = pd.DataFrame([input_features])
 
     # Make prediction
-    if st.sidebar.button("Predict"):
+    if st.button("Predict"):
         prediction = predict(input_df)
         st.subheader("Prediction Result")
         if prediction[0] == 1:
@@ -107,7 +107,7 @@ def main():
         else:
             st.error("The client is unlikely to return.")
 
-    elif app
+
 
 # Run the app
 if __name__ == "__main__":
