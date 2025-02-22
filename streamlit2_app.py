@@ -44,7 +44,7 @@ def powerbi_dashboard():
     # Input for Power BI Embed URL in the sidebar
     powerbi_url = st.sidebar.text_input(
         "Enter Power BI Embed URL:",
-        "https://app.powerbi.com/links/TjI-nyea44?ctid=e228c3df-233f-49c3-9d75-1ce285b59c78&pbi_source=linkShare"
+        "<iframe title="IFSSA CLEANED DATA" width="600" height="373.5" src="https://app.powerbi.com/view?r=eyJrIjoiMTE4Y2JiYWQtMzNhYS00NGFiLThmMDQtMmIwMDg4YTIzMjI5IiwidCI6ImUyMjhjM2RmLTIzM2YtNDljMy05ZDc1LTFjZTI4NWI1OWM3OCJ9" frameborder="0" allowFullScreen="true"></iframe>"
     )
 
     # Check if a valid URL is provided
