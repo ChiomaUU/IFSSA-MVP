@@ -41,37 +41,49 @@ def set_background(image_url):
     )
 
 def powerbi_dashboard():
-    # Input for Power BI Embed URL in the sidebar
-    powerbi_url = st.sidebar.text_input(
-        "Enter Power BI Embed URL:",
-        "https://app.powerbi.com/view?r=eyJrIjoiMTE4Y2JiYWQtMzNhYS00NGFiLThmMDQtMmIwMDg4YTIzMjI5IiwidCI6ImUyMjhjM2RmLTIzM2YtNDljMy05ZDc1LTFjZTI4NWI1OWM3OCJ9"
-    )
+    st.sidebar.markdown("### Power BI Dashboard Setup")
 
-    # Check if a valid URL is provided
-    if powerbi_url:
-        st.sidebar.markdown("### Power BI Dashboard")
-        st.sidebar.write("Interact with the embedded Power BI dashboard below:")
+    # Path to the PDF file in the repository
+    pdf_file_path = "path/to/your/dashboard.pdf"  # Update this path to the location of your PDF file
 
-        # Display the Power BI dashboard in the main content area
-        st.markdown("### Power BI Dashboard")
-        st.write("Below is the embedded Power BI dashboard:")
+    # Check if the PDF file exists
+    if os.path.exists(pdf_file_path):
+        st.sidebar.markdown("### View Power BI Dashboard PDF")
+        st.sidebar.write("Below is the PDF version of the Power BI dashboard.")
 
-        # Embed the Power BI Report using an iframe
-        powerbi_embed = f"""
-        <iframe
-            title="Power BI Report"
-            width="100%"
-            height="800"
-            src="{powerbi_url}"
-            frameborder="0"
-            allowFullScreen="true">
-        </iframe>
-        """
-        # Use components.html to render the iframe
-        components.html(powerbi_embed, height=800)
+        # Display the PDF in the main content area
+        st.markdown("### Power BI Dashboard (PDF)")
+        st.write("Below is the embedded PDF version of the Power BI dashboard:")
+
+        # Option 1: Use st.pdf_viewer (if available in your Streamlit version)
+        try:
+            with open(pdf_file_path, "rb") as file:
+                st.pdf_viewer(file.read())
+        except Exception as e:
+            st.warning(f"PDF viewer not available. Error: {e}")
+            # Fallback to Option 2: Embed PDF using an iframe
+            pdf_embed = f"""
+            <iframe
+                src="{pdf_file_path}"
+                width="100%"
+                height="800"
+                frameborder="0"
+                allowFullScreen="true">
+            </iframe>
+            """
+            components.html(pdf_embed, height=800)
     else:
-        st.sidebar.warning("Please enter a valid Power BI embed link.")
- 
+        st.sidebar.error("The PDF file was not found in the repository.")
+
+def main():
+    st.title("Power BI Dashboard PDF Viewer")
+    st.write("This app demonstrates how to display a PDF version of a Power BI dashboard in Streamlit.")
+
+    # Call the Power BI dashboard function
+    powerbi_dashboard()
+
+if __name__ == "__main__":
+    main()
 # Main function to run the app
 def main():
     # Add the header image
