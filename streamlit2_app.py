@@ -44,7 +44,7 @@ def powerbi_dashboard():
     st.sidebar.markdown("### Power BI Dashboard Setup")
 
     # Path to the PDF file in the repository
-    pdf_file_path = "https://github.com/ChiomaUU/IFSSA-MVP/blob/main/IFSSA%20CLEANED%20DATA.pdf"  # Update this path to the location of your PDF file
+    pdf_file_path = "IFSSA CLEANED DATA.pdf"  # Update this path to the location of your PDF file
 
     # Check if the PDF file exists
     if os.path.exists(pdf_file_path):
