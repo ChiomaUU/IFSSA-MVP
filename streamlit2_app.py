@@ -1,6 +1,7 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import pandas as pd
+import os
 
 # Simulate loading a dataset (for demonstration purposes)
 @st.cache_data
