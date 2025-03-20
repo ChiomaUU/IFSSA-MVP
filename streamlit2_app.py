@@ -91,16 +91,6 @@ def powerbi_dashboard():
         st.sidebar.error("The PDF file was not found in the repository.")
 
 def main():
-    st.title("Power BI Dashboard PDF Viewer")
-    st.write("This app demonstrates how to display a PDF version of a Power BI dashboard in Streamlit.")
-
-    # Call the Power BI dashboard function
-    powerbi_dashboard()
-
-if __name__ == "__main__":
-    main()
-# Main function to run the app
-def main():
     # Add the header image
     header_image_url = "https://raw.githubusercontent.com/ChiomaUU/Client-Prediction/refs/heads/main/ifssa_2844cc71-4dca-48ae-93c6-43295187e7ca.avif"
     st.image(header_image_url, use_container_width=True)  # Display the image at the top
@@ -116,33 +106,33 @@ def main():
         st.write(data)
 
    # User input fields (matching the top 5 important features)
-year_month = st.selectbox("Year-Month", ["2024-08", "2024-07", "2024-06"])
-total_visits = st.number_input("Total Visits", min_value=1, max_value=100, step=1)
-avg_days_between_pickups = st.number_input("Avg Days Between Pickups", min_value=1.0, max_value=100.0, step=0.1)
-days_since_last_pickup = st.number_input("Days Since Last Pickup", min_value=0, step=1)
+    year_month = st.selectbox("Year-Month", ["2024-08", "2024-07", "2024-06"])
+    total_visits = st.number_input("Total Visits", min_value=1, max_value=100, step=1)
+    avg_days_between_pickups = st.number_input("Avg Days Between Pickups", min_value=1.0, max_value=100.0, step=0.1)
+    days_since_last_pickup = st.number_input("Days Since Last Pickup", min_value=0, step=1)
 
-# Prepare input data
-input_data = {
-    "year_month_2024-08": 1 if year_month == "2024-08" else 0,  # One-hot encoding for year-month
-    "total_visits": total_visits,
-    "avg_days_between_pickups": avg_days_between_pickups,
-    "days_since_last_pickup": days_since_last_pickup
-}
+    # Prepare input data
+    input_data = {
+        "year_month_2024-08": 1 if year_month == "2024-08" else 0,  # One-hot encoding for year-month
+        "total_visits": total_visits,
+        "avg_days_between_pickups": avg_days_between_pickups,
+        "days_since_last_pickup": days_since_last_pickup
+    }
 
-# Prediction button
-if st.button("Predict"):
-    if model is None:
-        st.error("Model not loaded. Please check if 'model_top5.pkl' exists.")
-    else:
-        input_df = preprocess_input(input_data)
-        prediction = model.predict(input_df)
-        probability = model.predict_proba(input_df)
-
-        st.subheader("Prediction Result:")
-        st.write("✅ Prediction: **Yes**" if prediction[0] == 1 else "❌ Prediction: **No**")
-        st.write(f"📊 Probability (Yes): **{probability[0][1]:.4f}**")
-        st.write(f"📊 Probability (No): **{probability[0][0]:.4f}**")
-
+    # Prediction button
+    if st.button("Predict"):
+        if model is None:
+            st.error("Model not loaded. Please check if 'model_top5.pkl' exists.")
+        else:
+            input_df = preprocess_input(input_data)
+            prediction = model.predict(input_df)
+            probability = model.predict_proba(input_df)
+    
+            st.subheader("Prediction Result:")
+            st.write("✅ Prediction: **Yes**" if prediction[0] == 1 else "❌ Prediction: **No**")
+            st.write(f"📊 Probability (Yes): **{probability[0][1]:.4f}**")
+            st.write(f"📊 Probability (No): **{probability[0][0]:.4f}**")
+    
     # Add Power BI Dashboard to the sidebar
     powerbi_dashboard()
 
