@@ -6,3 +6,4 @@ plotly
 math
 sklearn
 streamlit
+python3 -m pip install --upgrade pip
