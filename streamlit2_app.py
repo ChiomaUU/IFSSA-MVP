@@ -5,8 +5,6 @@ import numpy as np
 import joblib
 import os
 
-
-
 # Load the trained model with caching
 @st.cache_resource
 def load_model():
@@ -15,7 +13,7 @@ def load_model():
     except Exception as e:
         st.error(f"Error loading model: {e}")
         return None
-        
+
 model = load_model()
 
 def load_data():
@@ -65,15 +63,14 @@ def set_background(image_url):
     )
 
 def powerbi_dashboard():
-    st.sidebar.markdown("### Power BI Dashboard Setup")
+    st.title("Power BI Dashboard")
 
     # Path to the PDF file in the repository
     pdf_file_path = "IFSSA CLEANED DATA.pdf"  # Update this path to the location of your PDF file
 
     # Check if the PDF file exists
     if os.path.exists(pdf_file_path):
-        st.sidebar.markdown("### View Power BI Dashboard PDF")
-        st.sidebar.write("Below is the PDF version of the Power BI dashboard.")
+        st.write("Below is the PDF version of the Power BI dashboard.")
 
         # Display the PDF in the main content area
         st.markdown("### Power BI Dashboard (PDF)")
@@ -97,9 +94,9 @@ def powerbi_dashboard():
             """
             components.html(pdf_embed, height=800)
     else:
-        st.sidebar.error("The PDF file was not found in the repository.")
+        st.error("The PDF file was not found in the repository.")
 
-def main():
+def prediction_page():
     # Add the header image
     header_image_url = "https://raw.githubusercontent.com/ChiomaUU/Client-Prediction/refs/heads/main/ifssa_2844cc71-4dca-48ae-93c6-43295187e7ca.avif"
     st.image(header_image_url, use_container_width=True)  # Display the image at the top
@@ -114,7 +111,7 @@ def main():
     if st.checkbox("Show raw data"):
         st.write(data)
 
-   # User input fields (matching the top 5 important features)
+    # User input fields (matching the top 5 important features)
     year_month = st.selectbox("Year-Month", ["2024-08", "2024-07", "2024-06"])
     total_visits = st.number_input("Total Visits", min_value=1, max_value=100, step=1)
     avg_days_between_pickups = st.number_input("Avg Days Between Pickups", min_value=1.0, max_value=100.0, step=0.1)
@@ -141,9 +138,16 @@ def main():
             st.write("✅ Prediction: **Yes**" if prediction[0] == 1 else "❌ Prediction: **No**")
             st.write(f"📊 Probability (Yes): **{probability[0][1]:.4f}**")
             st.write(f"📊 Probability (No): **{probability[0][0]:.4f}**")
-    
-    # Add Power BI Dashboard to the sidebar
-    powerbi_dashboard()
+
+# Main function to handle multi-page navigation
+def main():
+    st.sidebar.title("Navigation")
+    page = st.sidebar.radio("Go to", ["Prediction", "Power BI Dashboard"])
+
+    if page == "Prediction":
+        prediction_page()
+    elif page == "Power BI Dashboard":
+        powerbi_dashboard()
 
 # Run the app
 if __name__ == "__main__":
