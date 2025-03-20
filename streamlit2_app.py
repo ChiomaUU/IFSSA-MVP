@@ -9,7 +9,7 @@ import os
 @st.cache_resource
 def load_model():
     try:
-        return joblib.load("model_top5.pkl")  # Load the updated model
+        return joblib.load("./model_top5.pkl")  # Load the updated model
     except Exception as e:
         st.error(f"Error loading model: {e}")
         return None
@@ -18,7 +18,7 @@ model = load_model()
 
 def load_data():
     try:
-        return pd.read_csv("df.csv") 
+        return pd.read_csv("./df.csv")) 
     except Exception as e:
         st.error(f"Error loading data: {e}")
         return None
