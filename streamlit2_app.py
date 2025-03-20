@@ -16,6 +16,13 @@ def load_model():
         
 model = load_model()
 
+def load_data():
+    try:
+        return pd.read_csv("df.csv") 
+    except Exception as e:
+        st.error(f"Error loading data: {e}")
+        return None
+
 # Define only the top 5 features
 REQUIRED_COLUMNS = [
     "year_month_2024-08",  # One-hot encoded feature
