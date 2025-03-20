@@ -1,9 +1,7 @@
-numpy
+numpy==1.26.3
 joblib
 pandas
 catboost
 plotly
 math
 sklearn
-streamlit
-python3 -m pip install --upgrade pip
