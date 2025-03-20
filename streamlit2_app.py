@@ -1,9 +1,12 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import pandas as pd
-import os
-import joblib
 import numpy as np
+import joblib
+import os
+!pip install catboost
+import CatBoostClassifier
+
 
 # Load the trained model with caching
 @st.cache_resource
