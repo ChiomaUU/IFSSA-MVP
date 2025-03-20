@@ -74,7 +74,7 @@ def powerbi_dashboard():
         f"""
         <iframe
             width="100%"
-            height="800"
+            height="1200"
             src="{powerbi_link}"
             frameborder="0"
             allowFullScreen="true">
