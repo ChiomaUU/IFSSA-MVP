@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 import joblib
 import os
-python3 -m pip install --upgrade pip
+
 
 # Load the trained model with caching
 @st.cache_resource
