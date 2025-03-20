@@ -18,7 +18,7 @@ model = load_model()
 
 def load_data():
     try:
-        return pd.read_csv("./df.csv")) 
+        return pd.read_csv("./df.csv")
     except Exception as e:
         st.error(f"Error loading data: {e}")
         return None
