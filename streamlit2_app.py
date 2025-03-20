@@ -66,35 +66,22 @@ def powerbi_dashboard():
     st.title("Power BI Dashboard")
 
     # Path to the PDF file in the repository
-    pdf_file_path = "IFSSA CLEANED DATA.pdf"  # Update this path to the location of your PDF file
-
-    # Check if the PDF file exists
-    if os.path.exists(pdf_file_path):
-        st.write("Below is the PDF version of the Power BI dashboard.")
-
-        # Display the PDF in the main content area
-        st.markdown("### Power BI Dashboard (PDF)")
-        st.write("Below is the embedded PDF version of the Power BI dashboard:")
-
-        # Option 1: Use st.pdf_viewer (if available in your Streamlit version)
-        try:
-            with open(pdf_file_path, "rb") as file:
-                st.pdf_viewer(file.read())
-        except Exception as e:
-            st.warning(f"PDF viewer not available. Error: {e}")
-            # Fallback to Option 2: Embed PDF using an iframe
-            pdf_embed = f"""
-            <iframe
-                src="{pdf_file_path}"
-                width="100%"
-                height="800"
-                frameborder="0"
-                allowFullScreen="true">
-            </iframe>
-            """
-            components.html(pdf_embed, height=800)
-    else:
-        st.error("The PDF file was not found in the repository.")
+    powerbi_link= "https://app.powerbi.com/view?r=eyJrIjoiMTE4Y2JiYWQtMzNhYS00NGFiLThmMDQtMmIwMDg4YTIzMjI5IiwidCI6ImUyMjhjM2RmLTIzM2YtNDljMy05ZDc1LTFjZTI4NWI1OWM3OCJ9" 
+    
+    
+    # Embed the Power BI dashboard using an iframe
+    components.html(
+        f"""
+        <iframe
+            width="100%"
+            height="800"
+            src="{powerbi_link}"
+            frameborder="0"
+            allowFullScreen="true">
+        </iframe>
+        """,
+        height=800,
+    )
 
 def prediction_page():
     # Add the header image
