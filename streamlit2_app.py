@@ -2,27 +2,41 @@ import streamlit as st
 import streamlit.components.v1 as components
 import pandas as pd
 import os
+import joblib
+import numpy as np
 
-# Simulate loading a dataset (for demonstration purposes)
-@st.cache_data
-def load_data():
-    # Create a dummy dataset with equal-length columns
-    data = pd.DataFrame({
-        'age': [25, 30, 35, 40, 45],  # 5 rows
-        'household': [0, 1, 0, 1, 0],  # 5 rows (0 = No, 1 = Yes)
-        'time_since_previous_visit': [1, 2, 3, 4, 5],  # 5 rows
-        'contact_frequency': ['weekly', 'monthly', 'weekly', 'monthly', 'weekly'],  # 5 rows
-        'returned': [1, 0, 1, 0, 1]  # Target column (1 = returned, 0 = did not return)
-    })
-    return data
+# Load the trained model with caching
+@st.cache_resource
+def load_model():
+    try:
+        return joblib.load("model_top5.pkl")  # Load the updated model
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
+        return None
+        
+model = load_model()
 
-# Simulate a prediction (rule-based)
-def predict(input_data):
-    # Example rule: If age > 30 and household == 1, predict "likely to return"
-    if input_data['age'].values[0] > 30 and input_data['household'].values[0] == 1:
-        return [1]  # Likely to return
-    else:
-        return [0]  # Unlikely to return
+# Define only the top 5 features
+REQUIRED_COLUMNS = [
+    "year_month_2024-08",  # One-hot encoded feature
+    "total_visits",
+    "avg_days_between_pickups",
+    "days_since_last_pickup",
+    "year_month_2024-06"
+]
+
+# Function to preprocess input data
+def preprocess_input(input_data):
+    input_df = pd.DataFrame([input_data])
+
+    # Ensure all required columns exist
+    for col in REQUIRED_COLUMNS:
+        if col not in input_df.columns:
+            input_df[col] = 0  # Set missing columns to 0
+
+    # Ensure the column order matches model training
+    input_df = input_df[REQUIRED_COLUMNS]
+    return input_df
 
 # Set the background image (optional)
 def set_background(image_url):
@@ -91,8 +105,8 @@ def main():
     header_image_url = "https://raw.githubusercontent.com/ChiomaUU/Client-Prediction/refs/heads/main/ifssa_2844cc71-4dca-48ae-93c6-43295187e7ca.avif"
     st.image(header_image_url, use_container_width=True)  # Display the image at the top
 
-    st.title("Client Return Prediction App (MVP)")
-    st.write("This app predicts whether a client will return for food hampers.")
+    st.title("Client Return Prediction App")
+    st.write("Enter details to predict if a client will return.")
 
     # Load the dataset
     data = load_data()
@@ -101,27 +115,33 @@ def main():
     if st.checkbox("Show raw data"):
         st.write(data)
 
-    # Input fields for user to enter data
-    st.header("Input Features")
-    input_features = {}
+   # User input fields (matching the top 5 important features)
+year_month = st.selectbox("Year-Month", ["2024-08", "2024-07", "2024-06"])
+total_visits = st.number_input("Total Visits", min_value=1, max_value=100, step=1)
+avg_days_between_pickups = st.number_input("Avg Days Between Pickups", min_value=1.0, max_value=100.0, step=0.1)
+days_since_last_pickup = st.number_input("Days Since Last Pickup", min_value=0, step=1)
 
-    # Create input fields for each feature
-    input_features['age'] = st.number_input("Enter Age", min_value=0, max_value=100, value=30)
-    input_features['household'] = st.selectbox("Is the client part of a household?", options=[0, 1], format_func=lambda x: "Yes" if x == 1 else "No")
-    input_features['time_since_previous_visit'] = st.number_input("Enter Time Since Previous Visit (in months)", min_value=0, value=1)
-    input_features['contact_frequency'] = st.selectbox("Contact Frequency", options=["weekly", "monthly"])
+# Prepare input data
+input_data = {
+    "year_month_2024-08": 1 if year_month == "2024-08" else 0,  # One-hot encoding for year-month
+    "total_visits": total_visits,
+    "avg_days_between_pickups": avg_days_between_pickups,
+    "days_since_last_pickup": days_since_last_pickup
+}
 
-    # Convert input to DataFrame
-    input_df = pd.DataFrame([input_features])
+# Prediction button
+if st.button("Predict"):
+    if model is None:
+        st.error("Model not loaded. Please check if 'model_top5.pkl' exists.")
+    else:
+        input_df = preprocess_input(input_data)
+        prediction = model.predict(input_df)
+        probability = model.predict_proba(input_df)
 
-    # Make prediction
-    if st.button("Predict"):
-        prediction = predict(input_df)
-        st.subheader("Prediction Result")
-        if prediction[0] == 1:
-            st.success("The client is likely to return.")
-        else:
-            st.error("The client is unlikely to return.")
+        st.subheader("Prediction Result:")
+        st.write("✅ Prediction: **Yes**" if prediction[0] == 1 else "❌ Prediction: **No**")
+        st.write(f"📊 Probability (Yes): **{probability[0][1]:.4f}**")
+        st.write(f"📊 Probability (No): **{probability[0][0]:.4f}**")
 
     # Add Power BI Dashboard to the sidebar
     powerbi_dashboard()
